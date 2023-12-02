@@ -8,11 +8,11 @@ namespace AdventOfCode2023;
 
 public abstract class AdventOfCodeSolver
 {
-    protected string InputData { get; }
-    protected AdventOfCodeSolver(string day)
+    protected string[] InputData { get; }
+    protected AdventOfCodeSolver(string day, string fileName)
     {
-        string filePath = Path.Combine("DaySolutions\\" + day, day + ".txt");
-        InputData = File.ReadAllText(filePath);
+        string filePath = Path.Combine("DaySolutions\\" + day, fileName + ".txt");
+        InputData = File.ReadAllLines(filePath);
     }
 
     public abstract void SolvePartOne();

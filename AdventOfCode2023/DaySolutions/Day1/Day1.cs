@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Threading.Tasks;
@@ -67,7 +68,7 @@ public class Day1 : AdventOfCodeSolver
             string digit = leftDigit.ToString() + rightDigit.ToString();
             totalCalibration += int.Parse(digit);
         }
-        Console.WriteLine($"Total Calibration: {totalCalibration}");
+        Console.WriteLine($"Total Calibration - Part One: {totalCalibration}");
     }
 
     readonly struct TextNumber 
@@ -82,42 +83,29 @@ public class Day1 : AdventOfCodeSolver
         }
     }
 
-    readonly struct DigitIndex(int foundIndex, int number)
-    {
-        public int FoundIndex { get; }
-        private int Number { get; }
-    }
-
     private (TextNumber, TextNumber) GetTextNumber(string line)
     {
-        int leftMostTextNumberIndex = int.MaxValue;
-        int rightMostTextNumberIndex = -1;
-        string leftMostTextNumber = null;
-        string rightMostTextNumber = null;
+        TextNumber leftMostTextNumber = new TextNumber(int.MaxValue, "");
+        TextNumber rightMostTextNumber = new TextNumber(-1, "");
+
         foreach (var kvp in wordToNumber)
         {
             string word = kvp.Key;
-            int index = line.IndexOf(word);
+            int firstIndex = line.IndexOf(word);
+            int lastIndex = line.LastIndexOf(word);
 
-            if (index != -1 && index < leftMostTextNumberIndex)
+            if (firstIndex != -1 && firstIndex < leftMostTextNumber.FoundIndex)
             {
-                leftMostTextNumberIndex = index;
-                leftMostTextNumber = word;
+                leftMostTextNumber = new TextNumber(firstIndex, kvp.Value);
             }
 
-            if (index != -1 && index > rightMostTextNumberIndex)
+            if (lastIndex != -1 && lastIndex > rightMostTextNumber.FoundIndex)
             {
-                rightMostTextNumberIndex = index;
-                rightMostTextNumber = word;
+                rightMostTextNumber = new TextNumber(lastIndex, kvp.Value);
             }
         }
 
-        if (leftMostTextNumber == null || rightMostTextNumber == null)
-        {
-            return (new TextNumber(leftMostTextNumberIndex, ""), new TextNumber(rightMostTextNumberIndex, ""));
-        }
-
-        return (new TextNumber(leftMostTextNumberIndex, wordToNumber[leftMostTextNumber]), new TextNumber(rightMostTextNumberIndex, wordToNumber[rightMostTextNumber]));
+        return (leftMostTextNumber, rightMostTextNumber);
     }
 
     public override void SolvePartTwo()
@@ -136,7 +124,7 @@ public class Day1 : AdventOfCodeSolver
             int endIndex = line.Length - 1;
             bool foundLeftDigit = false;
             bool foundRightDigit = false;
-            while (startIndex < line.Length - 1 && ((!foundLeftDigit && !foundLeftWordDigit) || (!foundRightDigit && foundRightWordDigit)))
+            while (startIndex < line.Length)
             {
                 char currentLeftChar = line[startIndex];
                 char currentRightChar = line[endIndex];
@@ -171,6 +159,6 @@ public class Day1 : AdventOfCodeSolver
             string digit = leftDigit + rightDigit;
             totalCalibration += int.Parse(digit);
         }
-        Console.WriteLine($"Total Calibration: {totalCalibration}");
+        Console.WriteLine($"Total Calibration - Part Two: {totalCalibration}");
     }
 }

@@ -1,7 +1,8 @@
 ﻿using AdventOfCode2023.DaySolutions.Day1;
 
-var dayOne = new Day1("Day1", "Day1");
+var dayTwo = new Day2("Day2", "Day2");
 
-dayOne.SolvePartOne();
+dayTwo.SolvePartOne();
 
-dayOne.SolvePartTwo();
+dayTwo.SolvePartTwo();
+

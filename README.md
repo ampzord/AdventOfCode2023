@@ -4,3 +4,4 @@ Repository holding the resolution of the daily exercises of Advent Of Code 2023 
 
 Solved exercises:
 - [x] Day 01
+- [x] Day 02
